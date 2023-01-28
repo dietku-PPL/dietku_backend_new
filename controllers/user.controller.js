@@ -35,18 +35,26 @@ module.exports = {
     try {
       const { id } = req.params;
       const { umur, berat_badan, tinggi_badan, jk } = req.body;
-      
-      await DataUser.create({
+      const data = {
         id_user: id,
         umur,
         berat_badan,
         tinggi_badan,
         jk,
-        kalori: jk === "Laki-laki" ? 66 + (13.7 * berat_badan) + (5 * tinggi_badan) - (6.8 * umur) : 655 + (9.6 * berat_badan) + (1.8 * tinggi_badan) - (4.7 * umur)
+        kalori:
+          jk === "Laki-laki"
+            ? 66 + 13.7 * berat_badan + 5 * tinggi_badan - 6.8 * umur
+            : 655 + 9.6 * berat_badan + 1.8 * tinggi_badan - 4.7 * umur,
+      };
+      await DataUser.create({
+        data,
       });
 
       res.status(201).json({
         message: "success create data",
+        dataUser: {
+          data,
+        },
       });
     } catch (error) {
       next(error);
@@ -69,14 +77,19 @@ module.exports = {
   updateUserByID: async (req, res, next) => {
     const { id } = req.params;
     const { umur, berat_badan, tinggi_badan, jk } = req.body;
-
+    const dataUpdate = {
+      umur,
+      berat_badan,
+      tinggi_badan,
+      jk,
+      kalori:
+        jk === "Laki-laki"
+          ? 66 + 13.7 * berat_badan + 5 * tinggi_badan - 6.8 * umur
+          : 655 + 9.6 * berat_badan + 1.8 * tinggi_badan - 4.7 * umur,
+    };
     await DataUser.update(
       {
-        umur,
-        berat_badan,
-        tinggi_badan,
-        jk,
-        kalori: jk === "Laki-laki" ? 66 + (13.7 * berat_badan) + (5 * tinggi_badan) - (6.8 * umur) : 655 + (9.6 * berat_badan) + (1.8 * tinggi_badan) - (4.7 * umur)
+        dataUpdate,
       },
       {
         where: { id_user: id },
@@ -85,6 +98,7 @@ module.exports = {
 
     res.status(201).json({
       message: "updated data successfull",
+      dataUpdate,
     });
   },
 };
