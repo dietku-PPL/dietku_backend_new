@@ -4,8 +4,8 @@
     "password": "2jvPJTsMe6gwmjJzVjGo",
     "database": "railway",
     "host": "containers-us-west-162.railway.app",
-    "port": 6934,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "port": 6934
   },
   "test": {
     "username": "root",
@@ -19,6 +19,7 @@
     "password": "2jvPJTsMe6gwmjJzVjGo",
     "database": "railway",
     "host": "containers-us-west-162.railway.app",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "port": 6934
   }
 }
