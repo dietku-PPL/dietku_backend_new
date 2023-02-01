@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const {authorization} = require("../middleware/authorization");
 
 const {
   getAllDiet,
@@ -10,7 +11,7 @@ const {
 } = require("../controllers/dataDiet.controller");
 
 router.get("/", getAllDiet);
-router.get("/:id", getDietById);
+router.get("/:id", authorization, getDietById);
 router.post("/", addDiet);
 router.delete("/:id", deleteDiet);
 router.put("/:id", updateDiet);

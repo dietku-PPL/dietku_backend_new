@@ -2,6 +2,7 @@ const models = require("../models");
 const { DataUser } = models;
 const { User } = models;
 
+
 module.exports = {
   getAllUser: async (req, res, next) => {
     try {
