@@ -1,13 +1,26 @@
 const models = require("../models");
 const { DataUser } = models;
+const { User } = models;
 
 module.exports = {
   getAllUser: async (req, res, next) => {
     try {
+      const user = await User.findAll({
+        attributes: {
+          include: [
+            {
+              model: DataUser,
+              as: "DataUser",
+            },
+          ],
+          exclude: ["password"],
+        },
+      });
+
       const data = await DataUser.findAll();
       res.status(200).json({
         message: "success get data",
-        data,
+        user,
       });
     } catch (err) {
       next(err);
@@ -18,10 +31,23 @@ module.exports = {
     try {
       const { id } = req.params;
       const data = await DataUser.findOne({ where: { id_user: id } });
+      const user = await User.findOne({
+        where: { id },
+        include: [
+          {
+            model: DataUser,
+            as: "DataUser",
+          },
+        ],
+        attributes: { 
+        exclude: ["password", "createdAt", "updatedAt"],
+        },
+      });
+
       data
         ? res.status(200).json({
             message: "success get data",
-            data,
+            user,
           })
         : res.status(400).json({
             message: "data not found",
