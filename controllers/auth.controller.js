@@ -53,4 +53,29 @@ module.exports = {
       next(err);
     }
   },
+
+  resetPassword: async (req, res, next) => {
+    try
+    {
+      const { email, password } = req.body;
+      const passwordHash = new Hashes.MD5().hex(password);
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        res.status(400).json({
+          message: "email not found",
+        });
+      } else {
+        await User.update({
+          password: passwordHash,
+        }, {
+          where: { email }
+        });
+        res.status(200).json({
+          message: "success",
+        });
+      }
+    } catch (err) {
+      next(err);
+    }
+  },
 };
