@@ -2,7 +2,6 @@ const models = require("../models");
 const { DataUser } = models;
 const { User } = models;
 
-
 module.exports = {
   getAllUser: async (req, res, next) => {
     try {
@@ -31,7 +30,7 @@ module.exports = {
   getUserByID: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const data = await DataUser.findOne({ where: { id_user: id } });
+      const { userId } = res.locals.user;
       const user = await User.findOne({
         where: { id },
         include: [
@@ -40,18 +39,18 @@ module.exports = {
             as: "DataUser",
           },
         ],
-        attributes: { 
-        exclude: ["password", "createdAt", "updatedAt"],
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt"],
         },
       });
 
-      data
+      userId.toString() === id
         ? res.status(200).json({
             message: "success get data",
             user,
           })
         : res.status(400).json({
-            message: "data not found",
+            message: "restricted access",
           });
     } catch (err) {
       next(err);
