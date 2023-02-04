@@ -55,8 +55,7 @@ module.exports = {
   },
 
   resetPassword: async (req, res, next) => {
-    try
-    {
+    try {
       const { email, password } = req.body;
       const passwordHash = new Hashes.MD5().hex(password);
       const user = await User.findOne({ where: { email } });
@@ -65,17 +64,41 @@ module.exports = {
           message: "email not found",
         });
       } else {
-        await User.update({
-          password: passwordHash,
-        }, {
-          where: { email }
-        });
+        await User.update(
+          {
+            password: passwordHash,
+          },
+          {
+            where: { email },
+          }
+        );
         res.status(200).json({
           message: "success",
         });
       }
     } catch (err) {
       next(err);
+    }
+  },
+
+  getUser: async (req, res, next) => {
+    const { id } = req.params;
+    const user = await User.findOne({
+      where: { id },
+      attributes: {
+        exclude: ["password", "createdAt", "updatedAt"],
+      },
+    });
+
+    if (!user) {
+      res.status(400).json({
+        message: "user not found",
+      });
+    } else {
+      res.status(200).json({
+        message: "success get data",
+        user,
+      });
     }
   },
 };
