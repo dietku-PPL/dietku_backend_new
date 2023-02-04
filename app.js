@@ -2,7 +2,9 @@ const express = require('express');
 const app = express()
 var cors = require('cors')
 
-app.use(cors())
+app.use(cors(
+  {origin: '*'}
+))
 const allRoutes = require('./routes');
 
 const PORT = process.env.PORT || 3000
